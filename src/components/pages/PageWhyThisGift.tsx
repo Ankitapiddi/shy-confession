@@ -1,36 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import shyCharacter from "@/assets/shy-character.png";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   onContinue: () => void;
 }
 
 const doodles = [
-  { emoji: "☕", delay: 1.5 },
-  { emoji: "🌙", delay: 2.0 },
-  { emoji: "⭐", delay: 2.5 },
-  { emoji: "💗", delay: 3.0 },
+  { emoji: "⭐", position: { left: "8%", top: "25%" } },
+  { emoji: "🌸", position: { left: "85%", top: "30%" } },
+  { emoji: "💗", position: { left: "12%", top: "70%" } },
 ];
 
 const PageWhyThisGift = ({ onContinue }: Props) => {
   const [showLine1, setShowLine1] = useState(false);
   const [showLine2, setShowLine2] = useState(false);
-  const [showLine3, setShowLine3] = useState(false);
-  const [showLine4, setShowLine4] = useState(false);
   const [showDoodles, setShowDoodles] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     const timers = [
       setTimeout(() => setShowLine1(true), 500),
-      setTimeout(() => setShowLine2(true), 1500),
-      setTimeout(() => setShowLine3(true), 3000),
-      setTimeout(() => setShowLine4(true), 4500),
-      setTimeout(() => setShowDoodles(true), 2000),
-      setTimeout(() => onContinue(), 7000),
+      setTimeout(() => setShowLine2(true), 1800),
+      setTimeout(() => setShowDoodles(true), 1200),
+      setTimeout(() => setShowButton(true), 3000),
     ];
     
     return () => timers.forEach(clearTimeout);
-  }, [onContinue]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-paper-texture flex items-center justify-center p-4 animate-page-enter relative overflow-hidden">
@@ -45,32 +42,18 @@ const PageWhyThisGift = ({ onContinue }: Props) => {
         </div>
 
         {/* Text reveals - line by line */}
-        <div className="space-y-6 min-h-[200px]">
+        <div className="space-y-5 min-h-[160px]">
           {showLine1 && (
             <p className="font-display text-3xl md:text-4xl text-foreground animate-text-reveal">
-              I didn't know how to say this...
+              "I'm not good with words."
             </p>
           )}
           
           {showLine2 && (
             <p className="font-display text-2xl md:text-3xl text-primary animate-text-reveal">
-              ...so I made something instead.
+              "So I made this instead."
             </p>
           )}
-
-          <div className="pt-4 space-y-3">
-            {showLine3 && (
-              <p className="font-body text-lg text-muted-foreground animate-text-reveal">
-                Because some feelings feel safer...
-              </p>
-            )}
-            
-            {showLine4 && (
-              <p className="font-body text-lg text-muted-foreground animate-text-reveal">
-                when they're wrapped in tiny things.
-              </p>
-            )}
-          </div>
         </div>
 
         {/* Floating doodles */}
@@ -81,15 +64,27 @@ const PageWhyThisGift = ({ onContinue }: Props) => {
                 key={i}
                 className="absolute text-3xl animate-pop-in"
                 style={{
-                  left: `${10 + i * 25}%`,
-                  top: `${20 + (i % 2) * 60}%`,
-                  animationDelay: `${doodle.delay - 2}s`,
+                  ...doodle.position,
+                  animationDelay: `${i * 0.3}s`,
                 }}
               >
                 {doodle.emoji}
               </span>
             ))}
           </>
+        )}
+
+        {/* Continue button */}
+        {showButton && (
+          <div className="mt-8 animate-pop-in">
+            <Button
+              variant="yes"
+              size="lg"
+              onClick={onContinue}
+            >
+              Continue 💗
+            </Button>
+          </div>
         )}
       </div>
     </div>

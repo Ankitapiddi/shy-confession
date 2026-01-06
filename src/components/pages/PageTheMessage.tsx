@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import heartCard from "@/assets/heart-card.png";
-import twoCharacters from "@/assets/two-characters.png";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   onContinue: () => void;
@@ -8,85 +8,83 @@ interface Props {
 
 const PageTheMessage = ({ onContinue }: Props) => {
   const [showCard, setShowCard] = useState(false);
+  const [cardOpened, setCardOpened] = useState(false);
   const [showLine1, setShowLine1] = useState(false);
   const [showLine2, setShowLine2] = useState(false);
-  const [showLine3, setShowLine3] = useState(false);
-  const [showLine4, setShowLine4] = useState(false);
-  const [showCharacters, setShowCharacters] = useState(false);
-  const [showFinal, setShowFinal] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     const timers = [
       setTimeout(() => setShowCard(true), 300),
-      setTimeout(() => setShowLine1(true), 1000),
-      setTimeout(() => setShowLine2(true), 2200),
-      setTimeout(() => setShowLine3(true), 3800),
-      setTimeout(() => setShowLine4(true), 5200),
-      setTimeout(() => setShowCharacters(true), 4500),
-      setTimeout(() => setShowFinal(true), 7000),
-      setTimeout(() => onContinue(), 9500),
     ];
-    
     return () => timers.forEach(clearTimeout);
-  }, [onContinue]);
+  }, []);
+
+  const handleCardClick = () => {
+    if (!cardOpened) {
+      setCardOpened(true);
+      setTimeout(() => setShowLine1(true), 500);
+      setTimeout(() => setShowLine2(true), 2000);
+      setTimeout(() => setShowDisclaimer(true), 3500);
+      setTimeout(() => setShowButton(true), 4500);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-peach-lavender flex items-center justify-center p-4 animate-page-enter relative overflow-hidden">
       <div className="text-center max-w-lg mx-auto">
-        {/* Heart card */}
+        {/* Heart card - clickable to open */}
         {showCard && (
-          <div className="mb-8 animate-zoom-heart">
+          <div 
+            className={`mb-8 cursor-pointer transition-transform duration-500 ${cardOpened ? "scale-110" : "animate-zoom-heart hover:scale-105"}`}
+            onClick={handleCardClick}
+          >
             <img
               src={heartCard}
               alt="Heart shaped card"
-              className="w-48 h-48 mx-auto object-contain drop-shadow-lg pulse-gentle rounded-3xl"
+              className="w-56 h-56 mx-auto object-contain drop-shadow-lg pulse-gentle rounded-3xl"
             />
+            {!cardOpened && (
+              <p className="mt-4 font-body text-sm text-muted-foreground animate-pulse">
+                tap the heart to open 💗
+              </p>
+            )}
           </div>
         )}
 
-        {/* Message text - reveals line by line */}
-        <div className="space-y-5 min-h-[280px]">
+        {/* Message text - reveals after card opens */}
+        <div className="space-y-5 min-h-[200px]">
           {showLine1 && (
             <p className="font-display text-2xl md:text-3xl text-foreground animate-text-reveal">
-              This is not a big gift.
+              "You matter more than you think."
             </p>
           )}
           
           {showLine2 && (
-            <p className="font-display text-2xl md:text-3xl text-foreground animate-text-reveal">
-              But it's real.
+            <p className="font-display text-2xl md:text-3xl text-primary animate-text-reveal">
+              "And I'm really glad you opened this."
             </p>
           )}
 
-          {showLine3 && (
-            <p className="font-display text-xl md:text-2xl text-primary animate-text-reveal pt-4">
-              I just wanted you to know—
-            </p>
-          )}
-          
-          {showLine4 && (
-            <p className="font-display text-2xl md:text-3xl text-primary animate-text-reveal font-semibold">
-              you matter to me. 💗
+          {showDisclaimer && (
+            <p className="font-body text-sm text-muted-foreground animate-text-reveal pt-4">
+              (Even if I threatened you first.)
             </p>
           )}
         </div>
 
-        {/* Two characters illustration */}
-        {showCharacters && (
+        {/* Continue button */}
+        {showButton && (
           <div className="mt-8 animate-pop-in">
-            <img
-              src={twoCharacters}
-              alt="Two characters sitting together"
-              className="w-36 h-36 mx-auto object-contain drop-shadow-md rounded-3xl"
-            />
+            <Button
+              variant="yes"
+              size="lg"
+              onClick={onContinue}
+            >
+              Continue 💗
+            </Button>
           </div>
-        )}
-
-        {/* Final text */}
-        {showFinal && (
-          <p className="mt-8 font-body text-muted-foreground text-lg animate-text-reveal">
-            That's all... I just wanted you to have this 💗
-          </p>
         )}
 
         {/* Floating decorations */}

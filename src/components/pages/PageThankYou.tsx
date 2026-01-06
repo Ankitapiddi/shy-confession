@@ -37,7 +37,7 @@ const PageThankYou = () => {
 
         {/* Subtle message */}
         <p className="mt-10 font-body text-muted-foreground text-sm animate-text-reveal" style={{ animationDelay: "0.6s" }}>
-          I made this for you 💞
+          Character waves awkwardly... 👋
         </p>
 
         {/* Background sparkles */}
